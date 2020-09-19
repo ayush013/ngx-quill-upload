@@ -3,11 +3,12 @@ A module for images and videos to be uploaded to a server instead of being base6
 
 ## Features
 
-- Written in typescript
+- Re-written in typescript
 - Gives you full control over API call, upload to S3 bucket or server as required
 - Supports png, jpg and jpeg for image uploads
 - Supports mp4 and webm for video uploads
 - Supports <img> tag for image uploads, <video> tag for video uploads
+- Based on quill-upload by [john-techfox](https://github.com/john-techfox/quill-upload)
 
 ## Installation
 
@@ -56,7 +57,7 @@ Quill.register('modules/videoHandler', VideoHandler);
 ### A sample upload function for imageHandler
 
 ```javascript
-      upload: (file) => {
+   upload: (file) => {
         return new Promise((resolve, reject) => {
 
       if (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg') { // File types supported for image
@@ -94,4 +95,5 @@ Quill.register('modules/videoHandler', VideoHandler);
 ### Suppress global register warnings
 
 ngx-quill-upload uses `Quill.register` for overwriting an existing module for Image and Video handler, QuillJS logs a warning.
-To subpress those expected warnings you can turn them off by passing `suppressGlobalRegisterWarning: true` in ngx-quill config.
+To supress those expected warnings you can turn them off by passing `suppressGlobalRegisterWarning: true` in ngx-quill config.
+Read more [here](https://github.com/KillerCodeMonkey/ngx-quill)
