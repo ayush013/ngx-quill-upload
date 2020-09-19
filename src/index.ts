@@ -1,1 +1,1 @@
-export * from './handlers';
+export { ImageHandler, VideoHandler } from './handlers';
