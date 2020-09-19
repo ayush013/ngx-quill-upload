@@ -1,9 +1,9 @@
-# ngx-quill-upload (Angular 6 and above)
+# ngx-quill-upload (Angular 4+)
 A module for images and videos to be uploaded to a server instead of being base64 encoded, in ngx-quill from toolbar editor.
 
 ## Features
 
-- Re-written in typescript
+- Written in typescript
 - Gives you full control over API call, upload to S3 bucket or server as required
 - Supports png, jpg and jpeg for image uploads
 - Supports mp4 and webm for video uploads
@@ -12,7 +12,7 @@ A module for images and videos to be uploaded to a server instead of being base6
 
 ## Installation
 
-- `npm install ngx-quill-upload`
+- `npm install @ayush013/ngx-quill-upload@1.0.0`
 - install `quill` and `ngx-quill` for usage with ngx-quill
 - Make sure you have registered QuillModule as per ngx-quill documentation
 
