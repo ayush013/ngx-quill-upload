@@ -7,7 +7,7 @@ A module for images and videos to be uploaded to a server instead of being base6
 - Gives you full control over API call, upload to S3 bucket or server as required
 - Supports png, jpg and jpeg for image uploads
 - Supports mp4 and webm for video uploads
-- Supports <img> tag for image uploads, <video> tag for video uploads
+- Supports ```<img>``` tag for image uploads, ```<video>``` tag for video uploads
 - Based on quill-upload by [john-techfox](https://github.com/john-techfox/quill-upload)
 
 ## Installation
