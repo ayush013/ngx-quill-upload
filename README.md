@@ -4,6 +4,7 @@ A module for images and videos to be uploaded to a server instead of being base6
 ## Features
 
 - Written in typescript
+- Just 6.4KB (2.4 KB gzipped)
 - Gives you full control over API call, upload to S3 bucket or server as required
 - Supports png, jpg and jpeg for image uploads
 - Supports mp4 and webm for video uploads
@@ -12,7 +13,7 @@ A module for images and videos to be uploaded to a server instead of being base6
 
 ## Installation
 
-- `npm install @ayush013/ngx-quill-upload@1.0.0`
+- `npm install ngx-quill-upload`
 - install `quill` and `ngx-quill` for usage with ngx-quill
 - Make sure you have registered QuillModule as per ngx-quill documentation
 
@@ -73,7 +74,7 @@ Quill.register('modules/videoHandler', VideoHandler);
             })
             .catch(error => {
               reject('Upload failed'); 
-              // HANDLE ERROR CONTROL 
+              // Handle error control
               console.error('Error:', error);
             });
         } else {
@@ -90,7 +91,7 @@ Quill.register('modules/videoHandler', VideoHandler);
 
 ## Angular Universal
 
-- Although ngx-quill-upload isn't optimized for Server side rendering. You can still use it once bundle is fully loaded and Angular takes control
+- As of now ngz-quill-upload isn't optimized for Server side rendering. Consider adding a plaform-browser check on your own if you plan to use SSR.
 
 ### Suppress global register warnings
 
