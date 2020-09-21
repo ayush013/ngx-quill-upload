@@ -18,6 +18,9 @@ A module for images and videos to be uploaded to a server instead of being base6
 - install `quill` and `ngx-quill` for usage with ngx-quill
 - Make sure you have registered QuillModule as per ngx-quill documentation
 
+## NPM Directory
+
+[ngx-quill-upload](https://www.npmjs.com/package/ngx-quill-upload)
 
 ## Usage
 
