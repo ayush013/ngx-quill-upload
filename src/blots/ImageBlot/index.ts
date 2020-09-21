@@ -1,7 +1,8 @@
 import Quill from 'quill';
 import { Constants } from '../../utils';
 
-const BlockEmbed = Quill.import('blots/block/embed');
+const blotPath = 'blots/block/embed';
+const BlockEmbed = Quill.import(blotPath);
 
 class ImageBlot extends BlockEmbed {
   static tagName: string;

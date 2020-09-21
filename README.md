@@ -4,8 +4,9 @@ A module for images and videos to be uploaded to a server instead of being base6
 ## Features
 
 - Written in typescript
+- Bundled in both FESM2015 and UMD formats (Yayy Ivy!)
 - Just 6.4KB (2.4 KB gzipped)
-- Gives you full control over API call, upload to S3 bucket or server as required
+- Gives you full control over API call, upload to S3 or server as required
 - Supports png, jpg and jpeg for image uploads
 - Supports mp4 and webm for video uploads
 - Supports ```<img>``` tag for image uploads, ```<video>``` tag for video uploads
