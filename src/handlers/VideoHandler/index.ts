@@ -9,10 +9,9 @@ class VideoHandler extends BaseHandler {
 
     this.handler = Constants.blots.video;
     this.applyForToolbar();
+    Quill.register('formats/video', VideoBlot);
   }
 
 }
 
 export default VideoHandler;
-
-Quill.register('formats/video', VideoBlot);

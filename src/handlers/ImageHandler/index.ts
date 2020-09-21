@@ -9,10 +9,9 @@ class ImageHandler extends BaseHandler {
 
     this.handler = Constants.blots.image;
     this.applyForToolbar();
+    Quill.register('formats/image', ImageBlot);
   }
 
 }
 
 export default ImageHandler;
-
-Quill.register('formats/image', ImageBlot);

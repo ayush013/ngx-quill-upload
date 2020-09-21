@@ -1,4 +1,4 @@
-# ngx-quill-upload (Angular 4+)
+# ngx-quill-upload (Angular 4+) (v1.0.6)
 A module for images and videos to be uploaded to a server instead of being base64 encoded, in ngx-quill from toolbar editor.
 
 ## Features
@@ -25,12 +25,10 @@ A module for images and videos to be uploaded to a server instead of being base6
 
 ```javascript
 import Quill from 'quill';
-import { VideoHandler, ImageHandler, ImageBlot, VideoBlot } from 'ngx-quill-upload';
+import { VideoHandler, ImageHandler } from 'ngx-quill-upload';
 
 Quill.register('modules/imageHandler', ImageHandler);
 Quill.register('modules/videoHandler', VideoHandler);
-Quill.register('formats/image', ImageBlot);
-Quill.register('formats/video', VideoBlot);
 
 
   modules = {
@@ -95,10 +93,6 @@ Quill.register('formats/video', VideoBlot);
 ## Angular Universal
 
 - As of now ngx-quill-upload isn't optimized for Server side rendering. Consider adding a plaform-browser check on your own if you plan to use SSR.
-
-## Challenges [WIP]
-
-- ImageBlot and VideoBlot are not registered implictly in production build of Angular, While I'm searching for a workaround, if anyone has idea about what's wrong feel free to contribute
 
 ## Future Roadmap
 
