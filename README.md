@@ -4,7 +4,7 @@ A module for images and videos to be uploaded to a server instead of being base6
 ## Features
 
 - Written in typescript
-- Bundled in both FESM2015 and UMD formats (Yayy Ivy!)
+- Bundled in both FESM2015 and UMD formats
 - Just 6.4KB (2.4 KB gzipped)
 - Gives you full control over API call, upload to S3 or server as required
 - Supports png, jpg and jpeg for image uploads
@@ -25,10 +25,12 @@ A module for images and videos to be uploaded to a server instead of being base6
 
 ```javascript
 import Quill from 'quill';
-import { VideoHandler, ImageHandler } from 'ngx-quill-upload';
+import { VideoHandler, ImageHandler, ImageBlot, VideoBlot } from 'ngx-quill-upload';
 
 Quill.register('modules/imageHandler', ImageHandler);
 Quill.register('modules/videoHandler', VideoHandler);
+Quill.register('formats/image', ImageBlot);
+Quill.register('formats/video', VideoBlot);
 
 
   modules = {
@@ -92,7 +94,16 @@ Quill.register('modules/videoHandler', VideoHandler);
 
 ## Angular Universal
 
-- As of now ngz-quill-upload isn't optimized for Server side rendering. Consider adding a plaform-browser check on your own if you plan to use SSR.
+- As of now ngx-quill-upload isn't optimized for Server side rendering. Consider adding a plaform-browser check on your own if you plan to use SSR.
+
+## Challenges [WIP]
+
+- ImageBlot and VideoBlot are not registered implictly in production build of Angular, While I'm searching for a workaround, if anyone has idea about what's wrong feel free to contribute
+
+## Future Roadmap
+
+- Ability to provide custom formats for image/video in handler itself.
+
 
 ### Suppress global register warnings
 
