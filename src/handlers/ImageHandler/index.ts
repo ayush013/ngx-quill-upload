@@ -1,10 +1,10 @@
-import BaseHandler from '../BaseHandler';
+import BaseHandler, { Options } from '../BaseHandler';
 import { Constants } from '../../utils';
 import Quill from 'quill';
 import { ImageBlot } from '../../blots';
 
 class ImageHandler extends BaseHandler {
-  constructor(quill, options) {
+  constructor(quill, options: Options) {
     super(quill, options);
 
     this.handler = Constants.blots.image;

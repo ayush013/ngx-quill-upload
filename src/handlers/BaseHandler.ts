@@ -7,7 +7,8 @@ interface Range {
 }
 
 export interface Options {
-  upload(file): Promise<any>;
+  accepts: string[];
+  upload(file: File): Promise<string>;
 }
 
 class BaseHandler {
@@ -19,8 +20,10 @@ class BaseHandler {
   fileHolder: HTMLInputElement;
   handlerId: string;
   helpers = new Helpers();
+  allowedFormatRegex: RegExp;
+  possibleExtension: Set<string>;
 
-  constructor(quill, options) {
+  constructor(quill, options: Options) {
     this.quill = quill;
     this.options = options;
     this.range = null;
@@ -37,6 +40,26 @@ class BaseHandler {
     if (typeof this.options.upload !== 'function') {
       console.warn('[Missing config] upload function that returns a promise is required');
     }
+
+    setTimeout(() => {
+      if (!this.options.accepts) {
+        if (this.handler === Constants.blots.image) {
+          this.options.accepts = ['jpg', 'jpeg', 'png'];
+        }
+        if (this.handler === Constants.blots.video) {
+          this.options.accepts = ['mp4', 'webm'];
+        }
+      }
+
+      if (this.handler === Constants.blots.image) {
+        this.possibleExtension = new Set(['apng', 'bmp', 'gif', 'ico', 'cur', 'jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png', 'svg', 'tif', 'tiff', 'webp']);
+      }
+      if (this.handler === Constants.blots.video) {
+        this.possibleExtension = new Set(['mp4', 'webm', '3gp', 'mp4', 'mpeg', 'quickTime', 'ogg']);
+      }
+
+      this.allowedFormatRegex = new RegExp('^(' + this.options.accepts.filter((el) => this.possibleExtension.has(el.toLowerCase())).reduce((acc, el, i) => acc.concat(i !== 0 ? `|${el}` : `${el}`), '') + ')$', 'i');
+    }, 1);
   }
 
   applyForToolbar() {
@@ -56,7 +79,7 @@ class BaseHandler {
     this.fileHolder.click();
   }
 
-  loadFile(context) {
+  loadFile(context): File | null {
     this.loading.removeAttribute('class');
     this.loading.setAttribute('class', Constants.LOADING_CLASS_NAME);
 
@@ -70,7 +93,7 @@ class BaseHandler {
 
     if (!file) {
       console.warn('[File not found] Something was wrong, please try again!!');
-      return;
+      return null;
     }
 
     fileReader.readAsDataURL(file);
@@ -80,18 +103,29 @@ class BaseHandler {
 
   fileChanged() {
     const file = this.loadFile(this);
+
+    if (!file) {
+      return;
+    }
+
     const extension = file.name.split('.').pop();
 
-    if (!this.isImage(extension) && !this.isVideo(extension)) {
+    if (!this.isValidExtension(extension)) {
       console.warn(
-        '[Wrong Format] Format was wrong, please try with image format correctly!!'
+        '[Wrong Format] Format was wrong, please try with correct format!!'
+      );
+    }
+
+    if (!this.hasValidMimeType(file.type)) {
+      console.warn(
+        `[Incorrect Mime Type] The MIME Type of uploaded file is not ${this.handler}!!`
       );
     }
 
     this.embedFile(file);
   }
 
-  embedFile(file) {
+  embedFile(file: File) {
     this.options.upload(file).then(
       (url) => {
         this.insertFileToEditor(url);
@@ -109,7 +143,7 @@ class BaseHandler {
     );
   }
 
-  insertBase64Data(url, handlerId) {
+  insertBase64Data(url: string | ArrayBuffer, handlerId: string) {
     const range = this.range;
     this.quill.insertEmbed(
       range.index,
@@ -124,7 +158,7 @@ class BaseHandler {
     }
   }
 
-  insertFileToEditor(url) {
+  insertFileToEditor(url: string) {
     const el = document.getElementById(this.handlerId);
     if (el) {
       el.setAttribute('src', url);
@@ -133,12 +167,12 @@ class BaseHandler {
     }
   }
 
-  isImage(extension) {
-    return /(jpg|jpeg|png)$/i.test(extension);
+  isValidExtension(extension: string) {
+    return extension && this.allowedFormatRegex.test(extension);
   }
 
-  isVideo(extension) {
-    return /(mp4|webm)$/i.test(extension);
+  hasValidMimeType(type: string) {
+    return type && type.startsWith(this.handler);
   }
 
   isNotExistLoading() {

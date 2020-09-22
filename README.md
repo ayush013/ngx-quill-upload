@@ -12,6 +12,15 @@ A module for images and videos to be uploaded to a server instead of being base6
 - Supports ```<img>``` tag for image uploads, ```<video>``` tag for video uploads
 - Based on quill-upload by [john-techfox](https://github.com/john-techfox/quill-upload)
 
+## Updates
+
+- MIME Type check added for files
+- Added Support for providing extensions for the following image and video formats -
+  - Supported Image Extensions - 
+    - 'apng', 'bmp', 'gif', 'ico', 'cur', 'jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png', 'svg', 'tif', 'tiff', 'webp'
+  - Supported Video Extensions - 
+    - 'mp4', 'webm', '3gp', 'mp4', 'mpeg', 'quickTime', 'ogg'
+
 ## Installation
 
 - `npm install ngx-quill-upload`
@@ -28,7 +37,7 @@ A module for images and videos to be uploaded to a server instead of being base6
 
 ```javascript
 import Quill from 'quill';
-import { VideoHandler, ImageHandler } from 'ngx-quill-upload';
+import { VideoHandler, ImageHandler, Options } from 'ngx-quill-upload';
 
 Quill.register('modules/imageHandler', ImageHandler);
 Quill.register('modules/videoHandler', VideoHandler);
@@ -40,15 +49,17 @@ Quill.register('modules/videoHandler', VideoHandler);
     ....
       ['image', 'video']
     ],
-    imageHandler: {
+    imageHandler: <Options> {
       upload: (file) => {
-       return // your uploaded image URL in Promise
-      }
+       return // your uploaded image URL as Promise<string>
+      },
+      accepts: ['png', 'jpg', 'jpeg', 'jfif'] // Extensions to allow for images (Optional) | Default - ['jpg', 'jpeg', 'png']
     },
-    videoHandler: {
-      upload: file => {
-        return // your uploaded video URL in Promise
-      }
+    videoHandler: <Options> {
+      upload: (file) => {
+        return // your uploaded video URL as Promise<string>
+      },
+      accepts: ['mpeg', 'avi']  // Extensions to allow for videos (Optional) | Default - ['mp4', 'webm']
     }
   };
 ```
@@ -96,10 +107,6 @@ Quill.register('modules/videoHandler', VideoHandler);
 ## Angular Universal
 
 - As of now ngx-quill-upload isn't optimized for Server side rendering. Consider adding a plaform-browser check on your own if you plan to use SSR.
-
-## Future Roadmap
-
-- Ability to provide custom formats for image/video in handler itself.
 
 
 ### Suppress global register warnings

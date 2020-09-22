@@ -1,10 +1,10 @@
-import BaseHandler from '../BaseHandler';
+import BaseHandler, { Options } from '../BaseHandler';
 import { Constants } from '../../utils';
 import { VideoBlot } from '../../blots';
 import Quill from 'quill';
 
 class VideoHandler extends BaseHandler {
-  constructor(quill, options) {
+  constructor(quill, options: Options) {
     super(quill, options);
 
     this.handler = Constants.blots.video;
