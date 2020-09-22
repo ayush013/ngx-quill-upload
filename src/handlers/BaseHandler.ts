@@ -8,7 +8,7 @@ interface Range {
 
 export interface Options {
   accepts: string[];
-  upload(file): Promise<any>;
+  upload(file: File): Promise<string>;
 }
 
 class BaseHandler {
@@ -23,7 +23,7 @@ class BaseHandler {
   allowedFormatRegex: RegExp;
   possibleExtension: Set<string>;
 
-  constructor(quill, options) {
+  constructor(quill, options: Options) {
     this.quill = quill;
     this.options = options;
     this.range = null;
@@ -52,10 +52,10 @@ class BaseHandler {
       }
 
       if (this.handler === Constants.blots.image) {
-        this.possibleExtension = new Set(['jpg', 'png', 'gif', 'webp', 'tiff', 'psd', 'raw', 'bmp', 'heif', 'indd', 'jpeg', 'jfif', 'svg', 'ai', 'eps']);
+        this.possibleExtension = new Set(['apng', 'bmp', 'gif', 'ico', 'cur', 'jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png', 'svg', 'tif', 'tiff', 'webp']);
       }
       if (this.handler === Constants.blots.video) {
-        this.possibleExtension = new Set(['mkv', 'mp4', 'webm', 'aec', 'wlmp', 'mpv', '3gp', 'vob', 'wmv', 'mpv2', 'mpeg', 'video', 'avi', 'wmmp', 'flv', 'vid', 'ismv', '3gp2', 'mpg']);
+        this.possibleExtension = new Set(['mp4', 'webm', '3gp', 'mp4', 'mpeg', 'quickTime', 'ogg']);
       }
 
       this.allowedFormatRegex = new RegExp('^(' + this.options.accepts.filter((el) => this.possibleExtension.has(el.toLowerCase())).reduce((acc, el, i) => acc.concat(i !== 0 ? `|${el}` : `${el}`), '') + ')$', 'i');
@@ -79,7 +79,7 @@ class BaseHandler {
     this.fileHolder.click();
   }
 
-  loadFile(context) {
+  loadFile(context): File | null {
     this.loading.removeAttribute('class');
     this.loading.setAttribute('class', Constants.LOADING_CLASS_NAME);
 
@@ -93,7 +93,7 @@ class BaseHandler {
 
     if (!file) {
       console.warn('[File not found] Something was wrong, please try again!!');
-      return;
+      return null;
     }
 
     fileReader.readAsDataURL(file);
@@ -103,6 +103,11 @@ class BaseHandler {
 
   fileChanged() {
     const file = this.loadFile(this);
+
+    if (!file) {
+      return;
+    }
+
     const extension = file.name.split('.').pop();
 
     if (!this.isValidExtension(extension)) {
@@ -120,7 +125,7 @@ class BaseHandler {
     this.embedFile(file);
   }
 
-  embedFile(file) {
+  embedFile(file: File) {
     this.options.upload(file).then(
       (url) => {
         this.insertFileToEditor(url);
@@ -138,7 +143,7 @@ class BaseHandler {
     );
   }
 
-  insertBase64Data(url, handlerId) {
+  insertBase64Data(url: string | ArrayBuffer, handlerId: string) {
     const range = this.range;
     this.quill.insertEmbed(
       range.index,
@@ -153,7 +158,7 @@ class BaseHandler {
     }
   }
 
-  insertFileToEditor(url) {
+  insertFileToEditor(url: string) {
     const el = document.getElementById(this.handlerId);
     if (el) {
       el.setAttribute('src', url);
@@ -162,11 +167,11 @@ class BaseHandler {
     }
   }
 
-  isValidExtension(extension) {
+  isValidExtension(extension: string) {
     return extension && this.allowedFormatRegex.test(extension);
   }
 
-  hasValidMimeType(type) {
+  hasValidMimeType(type: string) {
     return type && type.startsWith(this.handler);
   }
 
