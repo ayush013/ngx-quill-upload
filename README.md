@@ -12,6 +12,15 @@ A module for images and videos to be uploaded to a server instead of being base6
 - Supports ```<img>``` tag for image uploads, ```<video>``` tag for video uploads
 - Based on quill-upload by [john-techfox](https://github.com/john-techfox/quill-upload)
 
+## Updates
+
+- MIME Type check added for files
+- Added Support for providing extensions for the following image and video formats -
+  - Supported Image Extensions - 
+    - 'jpg', 'png', 'gif', 'webp', 'tiff', 'psd', 'raw', 'bmp', 'heif', 'indd', 'jpeg', 'jfif', 'svg', 'ai', 'eps'
+  - Supported Video Extensions - 
+    - 'mkv', 'mp4', 'webm', 'aec', 'wlmp', 'mpv', '3gp', 'vob', 'wmv', 'mpv2', 'mpeg', 'video', 'avi', 'wmmp', 'flv', 'vid', 'ismv', '3gp2', 'mpg'
+
 ## Installation
 
 - `npm install ngx-quill-upload`
@@ -43,12 +52,14 @@ Quill.register('modules/videoHandler', VideoHandler);
     imageHandler: {
       upload: (file) => {
        return // your uploaded image URL in Promise
-      }
+      },
+      accepts: ['png', 'jpg', 'jpeg', 'jfif'] // Extensions to allow for images (Optional) | Default - ['jpg', 'jpeg', 'png']
     },
     videoHandler: {
       upload: file => {
         return // your uploaded video URL in Promise
-      }
+      },
+      accepts: ['mpeg', 'avi']  // Extensions to allow for videos (Optional) | Default - ['mp4', 'webm']
     }
   };
 ```
@@ -96,10 +107,6 @@ Quill.register('modules/videoHandler', VideoHandler);
 ## Angular Universal
 
 - As of now ngx-quill-upload isn't optimized for Server side rendering. Consider adding a plaform-browser check on your own if you plan to use SSR.
-
-## Future Roadmap
-
-- Ability to provide custom formats for image/video in handler itself.
 
 
 ### Suppress global register warnings

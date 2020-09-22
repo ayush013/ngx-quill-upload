@@ -7,6 +7,7 @@ interface Range {
 }
 
 export interface Options {
+  accepts: string[];
   upload(file): Promise<any>;
 }
 
@@ -19,6 +20,8 @@ class BaseHandler {
   fileHolder: HTMLInputElement;
   handlerId: string;
   helpers = new Helpers();
+  allowedFormatRegex: RegExp;
+  possibleExtension: Set<string>;
 
   constructor(quill, options) {
     this.quill = quill;
@@ -37,6 +40,26 @@ class BaseHandler {
     if (typeof this.options.upload !== 'function') {
       console.warn('[Missing config] upload function that returns a promise is required');
     }
+
+    setTimeout(() => {
+      if (!this.options.accepts) {
+        if (this.handler === Constants.blots.image) {
+          this.options.accepts = ['jpg', 'jpeg', 'png'];
+        }
+        if (this.handler === Constants.blots.video) {
+          this.options.accepts = ['mp4', 'webm'];
+        }
+      }
+
+      if (this.handler === Constants.blots.image) {
+        this.possibleExtension = new Set(['jpg', 'png', 'gif', 'webp', 'tiff', 'psd', 'raw', 'bmp', 'heif', 'indd', 'jpeg', 'jfif', 'svg', 'ai', 'eps']);
+      }
+      if (this.handler === Constants.blots.video) {
+        this.possibleExtension = new Set(['mkv', 'mp4', 'webm', 'aec', 'wlmp', 'mpv', '3gp', 'vob', 'wmv', 'mpv2', 'mpeg', 'video', 'avi', 'wmmp', 'flv', 'vid', 'ismv', '3gp2', 'mpg']);
+      }
+
+      this.allowedFormatRegex = new RegExp('^(' + this.options.accepts.filter((el) => this.possibleExtension.has(el.toLowerCase())).reduce((acc, el, i) => acc.concat(i !== 0 ? `|${el}` : `${el}`), '') + ')$', 'i');
+    }, 1);
   }
 
   applyForToolbar() {
@@ -82,9 +105,15 @@ class BaseHandler {
     const file = this.loadFile(this);
     const extension = file.name.split('.').pop();
 
-    if (!this.isImage(extension) && !this.isVideo(extension)) {
+    if (!this.isValidExtension(extension)) {
       console.warn(
-        '[Wrong Format] Format was wrong, please try with image format correctly!!'
+        '[Wrong Format] Format was wrong, please try with correct format!!'
+      );
+    }
+
+    if (!this.hasValidMimeType(file.type)) {
+      console.warn(
+        `[Incorrect Mime Type] The MIME Type of uploaded file is not ${this.handler}!!`
       );
     }
 
@@ -133,12 +162,12 @@ class BaseHandler {
     }
   }
 
-  isImage(extension) {
-    return /(jpg|jpeg|png)$/i.test(extension);
+  isValidExtension(extension) {
+    return extension && this.allowedFormatRegex.test(extension);
   }
 
-  isVideo(extension) {
-    return /(mp4|webm)$/i.test(extension);
+  hasValidMimeType(type) {
+    return type && type.startsWith(this.handler);
   }
 
   isNotExistLoading() {
