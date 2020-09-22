@@ -1,4 +1,7 @@
-# ngx-quill-upload (Angular 4+) (v1.0.6)
+# ngx-quill-upload (Angular 4+) (v1.1.0)
+
+<img src="https://www.code-inspector.com/project/13693/score/svg"> <img src="https://www.code-inspector.com/project/13693/status/svg"> <img src="https://img.shields.io/npm/dw/ngx-quill-upload"> <img src="https://img.shields.io/npm/l/ngx-quill-upload">
+
 A module for images and videos to be uploaded to a server instead of being base64 encoded, in ngx-quill from toolbar editor.
 
 ## Features
@@ -49,18 +52,18 @@ Quill.register('modules/videoHandler', VideoHandler);
     ....
       ['image', 'video']
     ],
-    imageHandler: <Options> {
+    imageHandler: {
       upload: (file) => {
        return // your uploaded image URL as Promise<string>
       },
       accepts: ['png', 'jpg', 'jpeg', 'jfif'] // Extensions to allow for images (Optional) | Default - ['jpg', 'jpeg', 'png']
-    },
-    videoHandler: <Options> {
+    } as Options,
+    videoHandler: {
       upload: (file) => {
         return // your uploaded video URL as Promise<string>
       },
       accepts: ['mpeg', 'avi']  // Extensions to allow for videos (Optional) | Default - ['mp4', 'webm']
-    }
+    } as Options
   };
 ```
 

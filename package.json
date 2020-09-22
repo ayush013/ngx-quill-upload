@@ -1,6 +1,6 @@
 {
   "name": "ngx-quill-upload",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "A module for images and videos to be uploaded to a server instead of being base64 encoded, in ngx-quill from toolbar editor.",
   "scripts": {
     "build": "ng-packagr -p package.json"
