@@ -10,7 +10,7 @@ export default class Helper {
   }
   loadingHTML(): string {
     return `<div id="${Constants.ID_SPLIT_FLAG}.QUILL-LOADING">
-                        <span style="width:90%;"><span class="progress">
+                        <span style="width:90%;"><span class="quill-progress">
                         </span></span>
                       </div>`;
   }

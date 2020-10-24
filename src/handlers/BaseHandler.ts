@@ -58,7 +58,8 @@ class BaseHandler {
         this.possibleExtension = new Set(['mp4', 'webm', '3gp', 'mp4', 'mpeg', 'quickTime', 'ogg']);
       }
 
-      this.allowedFormatRegex = new RegExp('^(' + this.options.accepts.filter((el) => this.possibleExtension.has(el.toLowerCase())).reduce((acc, el, i) => acc.concat(i !== 0 ? `|${el}` : `${el}`), '') + ')$', 'i');
+      this.allowedFormatRegex = new RegExp('^(' + this.options.accepts.filter((el) => this.possibleExtension.has(el.toLowerCase()))
+      .reduce((acc, el, i) => acc.concat(i !== 0 ? `|${el}` : `${el}`), '') + ')$', 'i');
     }, 1);
   }
 
@@ -79,7 +80,7 @@ class BaseHandler {
     this.fileHolder.click();
   }
 
-  loadFile(context): File | null {
+  loadFile(context) {
     this.loading.removeAttribute('class');
     this.loading.setAttribute('class', Constants.LOADING_CLASS_NAME);
 
@@ -98,11 +99,11 @@ class BaseHandler {
 
     fileReader.readAsDataURL(file);
 
-    return file;
+    return { file, handlerId: this.handlerId };
   }
 
   fileChanged() {
-    const file = this.loadFile(this);
+    const { file, handlerId } = this.loadFile(this);
 
     if (!file) {
       return;
@@ -122,13 +123,13 @@ class BaseHandler {
       );
     }
 
-    this.embedFile(file);
+    this.embedFile(file, handlerId);
   }
 
-  embedFile(file: File) {
+  embedFile(file: File, handlerId: string) {
     this.options.upload(file).then(
       (url) => {
-        this.insertFileToEditor(url);
+        this.insertFileToEditor(url, handlerId);
         this.loading.removeAttribute('class');
         this.loading.setAttribute('class', Constants.NONE_DISPLAY_CLASS_NAME);
       },
@@ -136,7 +137,7 @@ class BaseHandler {
         this.loading.removeAttribute('class');
         this.loading.setAttribute('class', Constants.NONE_DISPLAY_CLASS_NAME);
         setTimeout(() => {
-          const el = document.getElementById(this.handlerId);
+          const el = document.getElementById(handlerId);
           el.remove();
         }, 1000);
       }
@@ -158,8 +159,8 @@ class BaseHandler {
     }
   }
 
-  insertFileToEditor(url: string) {
-    const el = document.getElementById(this.handlerId);
+  insertFileToEditor(url: string, handlerId: string) {
+    const el = document.getElementById(handlerId);
     if (el) {
       el.setAttribute('src', url);
       el.removeAttribute('id');
