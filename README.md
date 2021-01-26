@@ -1,4 +1,4 @@
-# ngx-quill-upload (Angular 4+) (v1.1.1)
+# ngx-quill-upload (Angular 4+) (v2.0)
 
 <img src="https://www.code-inspector.com/project/13693/score/svg"> <img src="https://www.code-inspector.com/project/13693/status/svg"> <img src="https://img.shields.io/npm/dw/ngx-quill-upload"> <img src="https://img.shields.io/npm/l/ngx-quill-upload">
 
@@ -17,6 +17,7 @@ A module for images and videos to be uploaded to a server instead of being base6
 
 ## Updates
 
+- Image Attribute support added for ['style','alt','width','height']
 - Concurrent upload handling for images, videos
 - MIME Type check added for files
 - Added Support for providing extensions for the following image and video formats -
