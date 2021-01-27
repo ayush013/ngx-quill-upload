@@ -6,7 +6,7 @@ const BlockEmbed: EmbedBlot = Quill.import(blotPath);
 
 interface EmbedBlot {
   new(...args: any[]): EmbedBlot;
-  domNode: any;
+  domNode: HTMLImageElement;
   format(name, value);
   create(value?);
 }
