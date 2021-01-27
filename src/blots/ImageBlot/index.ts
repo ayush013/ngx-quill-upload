@@ -1,8 +1,22 @@
 import Quill from 'quill';
 import { Constants } from '../../utils';
 
-const blotPath = 'blots/block/embed';
-const BlockEmbed = Quill.import(blotPath);
+const blotPath = 'formats/image';
+const BlockEmbed: EmbedBlot = Quill.import(blotPath);
+
+interface EmbedBlot {
+  new(...args: any[]): EmbedBlot;
+  domNode: HTMLImageElement;
+  format(name, value);
+  create(value?);
+}
+
+const SUPPORTED_ATTRIBUTES = [
+  'alt',
+  'height',
+  'width',
+  'style'
+];
 
 class ImageBlot extends BlockEmbed {
   static tagName: string;
@@ -48,6 +62,27 @@ class ImageBlot extends BlockEmbed {
       alt: node.getAttribute('alt'),
       url: node.getAttribute('src'),
     };
+  }
+
+  static formats(domNode) {
+    return SUPPORTED_ATTRIBUTES.reduce(function (formats, attribute) {
+      if (domNode.hasAttribute(attribute)) {
+        formats[attribute] = domNode.getAttribute(attribute);
+      }
+      return formats;
+    }, {});
+  }
+
+  format(name, value) {
+    if (SUPPORTED_ATTRIBUTES.indexOf(name) > -1) {
+      if (value) {
+        this.domNode.setAttribute(name, value);
+      } else {
+        this.domNode.removeAttribute(name);
+      }
+    } else {
+      super.format(name, value);
+    }
   }
 }
 
