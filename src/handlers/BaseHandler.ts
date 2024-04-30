@@ -16,12 +16,12 @@ class BaseHandler {
   options: Options;
   range: Range | null;
   handler: string;
-  loading: HTMLElement;
   fileHolder: HTMLInputElement;
   handlerId: string;
   helpers = new Helpers();
   allowedFormatRegex: RegExp;
   possibleExtension: Set<string>;
+  _loading: HTMLElement;
 
   constructor(quill, options: Options) {
     this.quill = quill;
@@ -29,13 +29,6 @@ class BaseHandler {
     this.range = null;
 
     new Styled().apply();
-
-    if (this.isNotExistLoading()) {
-      const node = document.createElement('div');
-      node.innerHTML = this.helpers.loadingHTML();
-
-      this.quill.container.appendChild(node);
-    }
 
     if (typeof this.options.upload !== 'function') {
       console.warn('[Missing config] upload function that returns a promise is required');
@@ -63,11 +56,19 @@ class BaseHandler {
     }, 1);
   }
 
+  get loading(): HTMLElement {
+    if (!this._loading) {
+      const node = document.createElement('div');
+      node.innerHTML = this.helpers.loadingHTML();
+      this.quill.container.appendChild(node);
+      this._loading = node
+    }
+
+    return this._loading
+  }
+
   applyForToolbar() {
     const toolbar = this.quill.getModule('toolbar');
-    this.loading = document.getElementById(
-      `${Constants.ID_SPLIT_FLAG}.QUILL-LOADING`
-    );
     toolbar.addHandler(this.handler, this.selectLocalFile.bind(this));
   }
 
@@ -174,14 +175,6 @@ class BaseHandler {
 
   hasValidMimeType(type: string) {
     return type && type.startsWith(this.handler);
-  }
-
-  isNotExistLoading() {
-    const loading = document.getElementById(
-      `${Constants.ID_SPLIT_FLAG}.QUILL-LOADING`
-    );
-
-    return loading == null;
   }
 }
 
